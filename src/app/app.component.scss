@@ -1,8 +1,16 @@
 @import "/src/styles.scss";
 
 header {
+  position: relative;
+
   button {
-    padding: 1%;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
+    height: 10%;
+    width: 10%;
+    padding: 0;
+    margin: 0;
     border-radius: 50%;
 
     img {
@@ -17,5 +25,7 @@ main {
 }
 
 footer {
-
+  #heart {
+    color: $danger;
+  }
 }
