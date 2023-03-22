@@ -1,4 +1,4 @@
-[![pages-build-deployment](https://github.com/shyland-dev/jk-caminhao/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/shyland-dev/jk-caminhao/actions/workflows/pages/pages-build-deployment)
+[![pages-build-deployment](https://github.com/dudushy/collision.html/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/dudushy/collision.html/actions/workflows/pages/pages-build-deployment)
 
 # [collision.html](https://dudushy.github.io/collision.html/)
 A simple collision game (attempt).

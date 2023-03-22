@@ -13,19 +13,6 @@ $light: #f4f5f8;
 //   src: url("./assets/fonts/Bungee-Regular.ttf");
 // }
 
-* {
-  font-size: 1.5vmax;
-  font-family: monospace;
-  &[theme="dark"] {
-    background-color: $dark;
-    color: $light;
-  }
-  &[theme="light"] {
-    background-color: $light;
-    color: $dark;
-  }
-}
-
 html,
 body,
 app-root {
@@ -46,6 +33,19 @@ body {
 html, body {
   max-width: 100%;
   overflow-x: hidden;
+}
+
+* {
+  font-size: 1.5vmax;
+  font-family: monospace;
+  &[theme="dark"] {
+    background-color: $dark;
+    color: $light;
+  }
+  &[theme="light"] {
+    background-color: $light;
+    color: $dark;
+  }
 }
 
 //! CUSTOM SCROLLBAR [START]
