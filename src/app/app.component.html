@@ -15,7 +15,23 @@
 <!-- <router-outlet></router-outlet> -->
 
 <main [attr.theme]="theme" [attr.mobileMode]="mobileMode">
-  <h3>test</h3>
+  <div id="debug">
+    <button (click)="spawnTargets()">spawnTargets</button>
+    <button (click)="moveTargets()">moveTargets</button>
+    <button (click)="killAllTargets()">killAllTargets</button>
+  </div>
+
+  <div id="game">
+    <!-- !DEBUG -->
+    <!-- <div id="xhair">
+      <img alt="crosshair xhair" src="assets/SVGs/xhair.svg">
+    </div> -->
+
+    <div id="targets">
+      <!-- !DEBUG -->
+      <!-- <img class="target" alt="target" src="assets/SVGs/target0.svg"> -->
+    </div>
+  </div>
 </main>
 
 <footer [attr.theme]="theme" [attr.mobileMode]="mobileMode">

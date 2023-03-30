@@ -18,10 +18,13 @@ export class DbService {
   }
 
   get(varname: any) {
-    return JSON.parse(localStorage.getItem(varname) || 'null');
+    const output = JSON.parse(localStorage.getItem(varname) || 'null');
+    console.log(`[${this.title}#setupDb] varname: ${varname} | output:`, output);
+    return output;
   }
 
   set(varname: any, value: any) {
+    console.log(`[${this.title}#setupDb] varname: ${varname} | value:`, value);
     localStorage.setItem(varname, JSON.stringify(value));
   }
 }
