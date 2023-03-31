@@ -16,12 +16,17 @@
 
 <main [attr.theme]="theme" [attr.mobileMode]="mobileMode">
   <div id="debug">
+    <button id="debug-startButton" (click)="startGame()">startGame</button>
+    <button id="debug-endButton" (click)="endGame()">endGame</button>
     <button (click)="spawnTargets()">spawnTargets</button>
     <button (click)="moveTargets()">moveTargets</button>
-    <button (click)="killAllTargets()">killAllTargets</button>
   </div>
 
   <div id="game">
+    <button *ngIf="!gameRunning" id="startButton" (click)="startGame()">
+      START
+    </button>
+
     <!-- !DEBUG -->
     <!-- <div id="xhair">
       <img alt="crosshair xhair" src="assets/SVGs/xhair.svg">

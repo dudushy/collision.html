@@ -29,10 +29,27 @@ main {
     left: 0;
     height: 100%;
     width: 33%;
-    opacity: 0.8;
+    opacity: 0.9;
     display: flex;
     flex-direction: column;
     align-items: stretch;
+
+    button {
+      margin: 1%;
+      padding: 1%;
+      border: 1px solid $medium;
+      background-color: darken($medium, 10%);
+      color: $light;
+    }
+
+    #debug-startButton {
+      background-color: $success;
+      color: $dark;
+    }
+
+    #debug-endButton {
+      background-color: $danger;
+    }
   }
 
   #game {
@@ -44,6 +61,21 @@ main {
     // cursor: none;
     // cursor: url("../assets/SVGs/xhair.svg"), auto; //!DEBUG
     border: 10px solid lighten($medium, 10%);
+
+    #startButton {
+      position: absolute;
+      top: 35%;
+      left: 35%;
+      height: 10vmax;
+      width: 10vmax;
+      border-radius: 50%;
+      border: 5px solid $danger;
+      background-color: $success;
+      font-size: 2.5vmax;
+      z-index: 1;
+      transition: 250ms all;
+      user-select: none;
+    }
 
     #xhair {
       position: absolute;

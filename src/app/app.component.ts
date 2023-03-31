@@ -18,10 +18,13 @@ export class AppComponent {
   theme = 'dark';
   mobileMode = false;
 
-  gameSetup = false;
+  gameRunning = false;
   gameLevel = this.db.get('gameLevel') || 1;
 
+  nextTargetId = 0;
+
   killCounter = this.db.get('killCounter') || 0;
+  coinCounter = this.db.get('coinCounter') || 0;
 
   constructor(
     public db: DbService,
@@ -46,10 +49,10 @@ export class AppComponent {
     this.window.onload = () => {
       console.log(`[${this.title}#window.onload]`);
 
-      console.log(`[${this.title}#window.onload] gameSetup`, this.gameSetup);
-      if (this.gameSetup) return;
+      console.log(`[${this.title}#window.onload] gameRunning`, this.gameRunning);
+      if (this.gameRunning) return;
 
-      this.setupGame();
+      // this.startGame();
     };
   }
 
@@ -58,15 +61,53 @@ export class AppComponent {
     this.cdr.detectChanges;
   }
 
-  setupGame() {
-    console.log(`[${this.title}#setupGame]`);
+  startGame() {
+    console.log(`[${this.title}#startGame] (BEFORE) gameRunning`, this.gameRunning);
+
+    if (this.gameRunning) return;
 
     // this.setupXhair(); //!DEBUG
-    // this.spawnTargets();
-    // this.moveTargets();
+    this.spawnTargets();
+    this.moveTargets();
 
-    this.gameSetup = true;
-    console.log(`[${this.title}#setupGame] gameSetup`, this.gameSetup);
+    this.gameRunning = true;
+
+    console.log(`[${this.title}#startGame] (AFTER) gameRunning`, this.gameRunning);
+
+    this.updateView(this.title);
+  }
+
+  endGame() {
+    console.log(`[${this.title}#endGame] (BEFORE) gameRunning`, this.gameRunning);
+
+    if (!this.gameRunning) return;
+
+    const targets = document.getElementsByClassName('target') as HTMLCollectionOf<HTMLImageElement>;
+    console.log(`[${this.title}#endGame] targets`, targets);
+
+    for (const [key, value] of Object.entries(targets)) {
+      console.log(`[${this.title}#endGame] key:`, key, '| value:', value);
+
+      value.remove();
+    }
+
+    this.gameLevel = 1;
+    this.db.set('gameLevel', this.gameLevel);
+    console.log(`[${this.title}#endGame] gameLevel`, this.gameLevel);
+
+    this.killCounter = 0;
+    this.db.set('killCounter', this.killCounter);
+    console.log(`[${this.title}#endGame] killCounter`, this.killCounter);
+
+    this.coinCounter = 0;
+    this.db.set('coinCounter', this.coinCounter);
+    console.log(`[${this.title}#endGame] coinCounter`, this.coinCounter);
+
+    this.gameRunning = false;
+
+    console.log(`[${this.title}#endGame] (AFTER) gameRunning`, this.gameRunning);
+
+    this.updateView(this.title);
   }
 
   setupXhair() {
@@ -95,30 +136,6 @@ export class AppComponent {
     game?.addEventListener('mousemove', moveXhair);
   }
 
-  killAllTargets() {
-    console.log(`[${this.title}#killAllTargets]`);
-
-    const targets = document.getElementsByClassName('target') as HTMLCollectionOf<HTMLImageElement>;
-    console.log(`[${this.title}#killAllTargets] targets`, targets);
-
-    for (const [key, value] of Object.entries(targets)) {
-      console.log(`[${this.title}#killAllTargets] key:`, key, '| value:', value);
-
-      value.remove();
-    }
-
-    this.killCounter = 0;
-    this.gameLevel = 1;
-
-    this.db.set('killCounter', this.killCounter);
-    console.log(`[${this.title}#killAllTargets] killCounter`, this.killCounter);
-
-    this.db.set('gameLevel', this.gameLevel);
-    console.log(`[${this.title}#killAllTargets] gameLevel`, this.gameLevel);
-
-    this.updateView(this.title);
-  }
-
   killTarget(id: string) {
     console.log(`[${this.title}#killTarget] id`, id);
 
@@ -127,28 +144,27 @@ export class AppComponent {
     target?.remove();
 
     this.killCounter++;
-
     this.db.set('killCounter', this.killCounter);
     console.log(`[${this.title}#killTarget] killCounter`, this.killCounter);
 
     if ((this.killCounter / 5) > this.gameLevel) {
       this.gameLevel++;
-
       this.db.set('gameLevel', this.gameLevel);
       console.log(`[${this.title}#killTarget] gameLevel`, this.gameLevel);
     }
-
-    this.updateView(this.title);
   }
 
   moveTargets() {
+    const timeout = 1000 * (1 / this.gameLevel);
+    console.log(`[${this.title}#moveTargets] timeout`, timeout);
+
     const targets = document.getElementsByClassName('target') as HTMLCollectionOf<HTMLImageElement>;
     console.log(`[${this.title}#moveTargets] targets`, targets);
 
     for (const [key, value] of Object.entries(targets)) {
       console.log(`[${this.title}#moveTargets] key:`, key, '| value:', value);
 
-      const amount = this.gameLevel * 13;
+      const amount = 10 * (1 / this.gameLevel);
       console.log(`[${this.title}#moveTargets] amount`, amount);
 
       const Ypos = parseInt(value.style.top.replace('px', '')) || 1;
@@ -156,14 +172,10 @@ export class AppComponent {
       console.log(`[${this.title}#moveTargets] Ypos`, Ypos);
 
       value.style.top = `${Ypos + amount}px`;
-
-      this.updateView(this.title);
     }
 
-    const timeout = this.gameLevel * 1000 / 2;
-
     setTimeout(() => {
-      if (targets.length == 0) return;
+      if (!this.gameRunning) return;
       this.moveTargets();
     }, timeout);
   }
@@ -183,6 +195,9 @@ export class AppComponent {
     newTarget.style.position = 'absolute';
     newTarget.style.height = '2vmax';
     newTarget.style.width = '2vmax';
+    // newTarget.style.left = Math.floor(Math.random() * 91) + '%';
+    newTarget.style.left = (Math.random() * (91.5 - 0) + 0) + '%';
+    // newTarget.style.left = '91%';
     newTarget.style.padding = '1%';
     newTarget.style.borderRadius = '50%';
     newTarget.style.backgroundColor = '#eb445a';
@@ -191,7 +206,7 @@ export class AppComponent {
     newTarget.style.userSelect = 'none';
     newTarget.setAttribute('draggable', 'false');
 
-    newTarget.id = `target${targets?.children.length}`;
+    newTarget.id = `target${this.nextTargetId++}`;
     newTarget.onclick = () => {
       this.killTarget(newTarget.id);
     };
@@ -200,7 +215,7 @@ export class AppComponent {
     targets?.appendChild(newTarget);
 
     setTimeout(() => {
-      if (targets?.children.length == 0) return;
+      if (!this.gameRunning) return;
       this.spawnTargets();
     }, timeout);
   }
