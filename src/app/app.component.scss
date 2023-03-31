@@ -64,7 +64,8 @@ main {
       border-radius: 50%;
       background-color: $danger;
       z-index: 1;
-      transition: 500ms all;
+      transition: 250ms all;
+      user-select: none;
     }
   }
 }

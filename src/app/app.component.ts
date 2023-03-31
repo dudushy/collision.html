@@ -188,6 +188,8 @@ export class AppComponent {
     newTarget.style.backgroundColor = '#eb445a';
     newTarget.style.zIndex = '1';
     newTarget.style.transition = '250ms all';
+    newTarget.style.userSelect = 'none';
+    newTarget.setAttribute('draggable', 'false');
 
     newTarget.id = `target${targets?.children.length}`;
     newTarget.onclick = () => {
