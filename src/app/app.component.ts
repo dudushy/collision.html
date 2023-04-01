@@ -278,6 +278,7 @@ export class AppComponent {
     newTarget.style.transition = '250ms all';
     newTarget.style.userSelect = 'none';
     newTarget.setAttribute('draggable', 'false');
+    newTarget.ondragstart = function() { return false; };
 
     newTarget.id = `target${this.nextTargetId++}`;
     newTarget.onclick = () => {
