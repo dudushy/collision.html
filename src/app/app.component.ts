@@ -176,11 +176,12 @@ export class AppComponent {
 
     console.log(`[${this.title}#takeHit] (BEFORE) lifeCounter`, this.lifeCounter);
     this.lifeCounter -= 10;
+    this.db.set('lifeCounter', this.lifeCounter);
+    console.log(`[${this.title}#takeHit] (AFTER) lifeCounter`, this.lifeCounter);
 
     if (this.lifeCounter <= 0) {
       this.endGame();
     }
-    console.log(`[${this.title}#takeHit] (AFTER) lifeCounter`, this.lifeCounter);
   }
 
   detectCollision(id: string) {
