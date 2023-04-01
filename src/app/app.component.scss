@@ -40,6 +40,7 @@ main {
       border: 1px solid $medium;
       background-color: darken($medium, 10%);
       color: $light;
+      font-size: 2vmax;
     }
 
     #debug-startButton {
@@ -62,6 +63,71 @@ main {
     // cursor: url("../assets/SVGs/xhair.svg"), auto; //!DEBUG
     border: 10px solid lighten($medium, 10%);
 
+    #life {
+      position: absolute;
+      top: 98%;
+      left: 0;
+      height: 2%;
+      // width: 100%;
+      background-color: $danger;
+      z-index: 1;
+      transition: 250ms all;
+    }
+
+    #level {
+      position: absolute;
+      top: 33%;
+      left: 42%;
+      font-size: 3vmax;
+      height: 5vmax;
+      width: 5vmax;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1%;
+      border-radius: 50%;
+      background-color: $dark;
+      color: $success;
+      z-index: 1;
+      transition: 250ms all;
+    }
+
+    #kills {
+      position: absolute;
+      top: 33%;
+      left: 10%;
+      font-size: 3vmax;
+      height: 5vmax;
+      width: 5vmax;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1%;
+      border-radius: 50%;
+      background-color: $danger;
+      color: $light;
+      z-index: 1;
+      transition: 250ms all;
+    }
+
+    #coins {
+      position: absolute;
+      top: 33%;
+      left: 75%;
+      font-size: 3vmax;
+      height: 5vmax;
+      width: 5vmax;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1%;
+      border-radius: 50%;
+      background-color: $warning;
+      color: $dark;
+      z-index: 1;
+      transition: 250ms all;
+    }
+
     #startButton {
       position: absolute;
       top: 35%;
@@ -72,7 +138,7 @@ main {
       border: 5px solid $danger;
       background-color: $success;
       font-size: 2.5vmax;
-      z-index: 1;
+      z-index: 2;
       transition: 250ms all;
       user-select: none;
     }

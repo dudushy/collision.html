@@ -23,6 +23,7 @@ export class AppComponent {
 
   nextTargetId = 0;
 
+  lifeCounter = this.db.get('lifeCounter') || 100;
   killCounter = this.db.get('killCounter') || 0;
   coinCounter = this.db.get('coinCounter') || 0;
 
@@ -66,11 +67,11 @@ export class AppComponent {
 
     if (this.gameRunning) return;
 
+    this.gameRunning = true;
+
     // this.setupXhair(); //!DEBUG
     this.spawnTargets();
     this.moveTargets();
-
-    this.gameRunning = true;
 
     console.log(`[${this.title}#startGame] (AFTER) gameRunning`, this.gameRunning);
 
@@ -94,6 +95,10 @@ export class AppComponent {
     this.gameLevel = 1;
     this.db.set('gameLevel', this.gameLevel);
     console.log(`[${this.title}#endGame] gameLevel`, this.gameLevel);
+
+    this.lifeCounter = 100;
+    this.db.set('lifeCounter', this.lifeCounter);
+    console.log(`[${this.title}#endGame] lifeCounter`, this.lifeCounter);
 
     this.killCounter = 0;
     this.db.set('killCounter', this.killCounter);
@@ -137,11 +142,17 @@ export class AppComponent {
   }
 
   killTarget(id: string) {
+    if (!this.gameRunning) return;
+
     console.log(`[${this.title}#killTarget] id`, id);
 
-    const target = document.getElementById(id);
+    const target = document.getElementById(id) as HTMLImageElement;
     console.log(`[${this.title}#killTarget] target`, target);
     target?.remove();
+
+    this.coinCounter++;
+    this.db.set('coinCounter', this.coinCounter);
+    console.log(`[${this.title}#killTarget] coinCounter`, this.coinCounter);
 
     this.killCounter++;
     this.db.set('killCounter', this.killCounter);
@@ -154,7 +165,62 @@ export class AppComponent {
     }
   }
 
+  takeHit(id: string) {
+    if (!this.gameRunning) return;
+
+    console.log(`[${this.title}#takeHit] id`, id);
+
+    const target = document.getElementById(id) as HTMLImageElement;
+    console.log(`[${this.title}#takeHit] target`, target);
+    target?.remove();
+
+    console.log(`[${this.title}#takeHit] (BEFORE) lifeCounter`, this.lifeCounter);
+    this.lifeCounter -= 10;
+
+    if (this.lifeCounter <= 0) {
+      this.endGame();
+    }
+    console.log(`[${this.title}#takeHit] (AFTER) lifeCounter`, this.lifeCounter);
+  }
+
+  detectCollision(id: string) {
+    if (!this.gameRunning) return;
+
+    console.log(`[${this.title}#detectCollision] id`, id);
+
+    const target = document.getElementById(id) as HTMLImageElement;
+    console.log(`[${this.title}#detectCollision] target`, target);
+
+    const targetX = target.offsetLeft;
+    console.log(`[${this.title}#detectCollision] targetX`, targetX);
+
+    const targetY = target.offsetTop;
+    console.log(`[${this.title}#detectCollision] targetY`, targetY);
+
+    const game = document.getElementById('game') as HTMLDivElement;
+    console.log(`[${this.title}#detectCollision] game`, game);
+
+    const gameW = game.clientWidth;
+    console.log(`[${this.title}#detectCollision] gameW`, gameW);
+
+    const gameH = game.clientHeight - 20;
+    console.log(`[${this.title}#detectCollision] gameH`, gameH);
+
+    const collisionCheck = targetY >= gameH;
+    console.log(`[${this.title}#detectCollision] collisionCheck`, collisionCheck);
+
+    if (collisionCheck) {
+      console.log(`[${this.title}#detectCollision] collision detected`);
+      // alert('collision detected');
+      return true;
+    }
+
+    return false;
+  }
+
   moveTargets() {
+    if (!this.gameRunning) return;
+
     const timeout = 1000 * (1 / this.gameLevel);
     console.log(`[${this.title}#moveTargets] timeout`, timeout);
 
@@ -163,6 +229,11 @@ export class AppComponent {
 
     for (const [key, value] of Object.entries(targets)) {
       console.log(`[${this.title}#moveTargets] key:`, key, '| value:', value);
+
+      if (this.detectCollision(value.id)) {
+        this.takeHit(value.id);
+        continue;
+      }
 
       const amount = 10 * (1 / this.gameLevel);
       console.log(`[${this.title}#moveTargets] amount`, amount);
@@ -181,6 +252,8 @@ export class AppComponent {
   }
 
   spawnTargets() {
+    if (!this.gameRunning) return;
+
     const timeout = this.gameLevel * 1000;
     console.log(`[${this.title}#spawnTargets] timeout`, timeout);
 
