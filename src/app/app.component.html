@@ -22,12 +22,12 @@
     <button (click)="moveTargets()">moveTargets</button>
   </div>
 
-  <div id="game">
+  <div id="game" draggable="false">
     <button *ngIf="!gameRunning" id="startButton" (click)="startGame()">
       START
     </button>
 
-    <div id="life" style="width: {{lifeCounter}}%;"></div>
+    <div id="life" style="width: {{lifeCounter}}%;" draggable="false"></div>
 
     <p id="level">{{this.gameLevel}}</p>
     <p id="kills">{{this.killCounter}}</p>
@@ -38,7 +38,7 @@
       <img alt="crosshair xhair" src="assets/SVGs/xhair.svg">
     </div> -->
 
-    <div id="targets">
+    <div id="targets" draggable="false">
       <!-- !DEBUG -->
       <!-- <img class="target" alt="target" src="assets/SVGs/target0.svg"> -->
     </div>
