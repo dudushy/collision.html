@@ -235,7 +235,7 @@ export class AppComponent {
         continue;
       }
 
-      const amount = 10 * (1 / this.gameLevel);
+      const amount = (10 / (1 / this.gameLevel)) / 2;
       console.log(`[${this.title}#moveTargets] amount`, amount);
 
       const Ypos = parseInt(value.style.top.replace('px', '')) || 1;
@@ -254,7 +254,7 @@ export class AppComponent {
   spawnTargets() {
     if (!this.gameRunning) return;
 
-    const timeout = this.gameLevel * 1000;
+    const timeout = 1000 * (1 / this.gameLevel);
     console.log(`[${this.title}#spawnTargets] timeout`, timeout);
 
     const targets = document.getElementById('targets');
